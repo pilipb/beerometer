@@ -1,16 +1,20 @@
-# beerometer
+# Beerometer - name TBD
 
-A new Flutter project.
+## Description
 
-## Getting Started
+This (web) app lets you track your alcohol consumption. 
+Each time you have a drink, log it in the app.
+The app will keep track of units / drinks and give a summary for the day, week, month, year etc.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+Login with email and password
+Add a drink
+View summary of drinks consumed
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+#### Unit measures
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I will add more drinks / quantities as I go along. But currently:
+- 1 pint of beer = 2.5 units
+- 1 glass of wine = 2.1 units
+- 1 shot of spirits = 1 unit

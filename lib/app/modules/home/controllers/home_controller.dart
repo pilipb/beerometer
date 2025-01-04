@@ -63,7 +63,7 @@ class HomeController extends GetxController {
   }
 
   // Methods for each drink type
-  Future<void> addBeer() => _addUnits("beer", 2.0); // 2.0 units for a beer
-  Future<void> addWine() => _addUnits("wine", 2.0); // 2.0 units for a glass of wine
+  Future<void> addBeer() => _addUnits("beer", 2.5); // 2.0 units for a beer
+  Future<void> addWine() => _addUnits("wine", 2.1); // 2.0 units for a glass of wine
   Future<void> addSpirit() => _addUnits("spirit", 1.0); // 1.0 unit for a spirit
 }
