@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../stats/views/stats_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -13,14 +12,25 @@ class HomeView extends GetView<HomeController> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(200),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(500.0), // Set the desired height here
         child: CupertinoNavigationBar(
-          middle: Text("I've just had a", style: TextStyle(fontSize: 40)),
+          // leading: Icon(CupertinoIcons.settings),
+          middle: const Text(
+            "I've just had an...",
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.chart_bar_alt_fill), 
+            onPressed: () {
+            Get.toNamed('stats');
+          }),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 30),
         child: SafeArea(
           top: true,
           child: Center(
@@ -56,13 +66,13 @@ class HomeView extends GetView<HomeController> {
                     action: controller.addSpirit,
                   ),
                 ),
-                const SizedBox(height: 28),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed('stats');
-                  },
-                  child: Text('Stats'),
-                ),
+                // const SizedBox(height: 28),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     Get.toNamed('stats');
+                //   },
+                //   child: const Text('Stats'),
+                // ),
               ],
             ),
           ),
@@ -142,7 +152,7 @@ class _AnimatedActionButtonState extends State<AnimatedActionButton> {
             widget.label,
             style: const TextStyle(
               color: CupertinoColors.white,
-              fontSize: 26,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
           ),
