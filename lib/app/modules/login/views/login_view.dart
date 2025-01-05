@@ -101,31 +101,31 @@ class LoginView extends GetView<LoginController> {
               const SizedBox(height: 24),
 
               // Google Sign-In Button
-              SizedBox(
-                width: screenWidth * 0.9,
-                child: CupertinoButton(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  color: CupertinoColors.systemGrey,
-                  borderRadius: BorderRadius.circular(10),
-                  onPressed: controller.signInWithGoogle,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(CupertinoIcons.person_crop_circle_badge_plus,
-                          color: CupertinoColors.black),
-                      SizedBox(width: 8),
-                      Text(
-                        "Login with Google",
-                        style: TextStyle(
-                          color: CupertinoColors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: screenWidth * 0.9,
+              //   child: CupertinoButton(
+              //     padding: const EdgeInsets.symmetric(vertical: 16),
+              //     color: CupertinoColors.systemGrey,
+              //     borderRadius: BorderRadius.circular(10),
+              //     onPressed: controller.signInWithGoogle,
+              //     child: const Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Icon(CupertinoIcons.person_crop_circle_badge_plus,
+              //             color: CupertinoColors.black),
+              //         SizedBox(width: 8),
+              //         Text(
+              //           "Login with Google",
+              //           style: TextStyle(
+              //             color: CupertinoColors.black,
+              //             fontSize: 16,
+              //             fontWeight: FontWeight.w600,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

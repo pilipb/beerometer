@@ -13,20 +13,33 @@ class HomeView extends GetView<HomeController> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(500.0), // Set the desired height here
-        child: CupertinoNavigationBar(
-          // leading: Icon(CupertinoIcons.settings),
-          middle: const Text(
-            "I've just had an...",
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(CupertinoIcons.chart_bar_alt_fill), 
-            onPressed: () {
-            Get.toNamed('stats');
-          }),
+        preferredSize: const Size.fromHeight(100),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 40),
+            CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.transparent,
+                    leading: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                      Get.toNamed('settings');
+                    },
+                      child: const Icon(CupertinoIcons.settings),
+                    ),
+                    middle: const Text(
+                      "I've just had a...",
+                      style: TextStyle(fontSize: 28),
+                      textAlign: TextAlign.center,
+                    ),
+                    trailing: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      child: const Icon(CupertinoIcons.chart_bar_alt_fill), 
+                      onPressed: () {
+                      Get.toNamed('stats');
+                    }),
+                  ),
+          ],
         ),
       ),
       body: Padding(

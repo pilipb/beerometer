@@ -4,25 +4,39 @@ import 'package:get/get.dart';
 
 import '../controllers/stats_controller.dart';
 
-
 class StatsView extends GetView<StatsController> {
   @override
   Widget build(BuildContext context) {
     // Fetch stats on page load
     controller.fetchStats();
 
-    return CupertinoPageScaffold(
-      navigationBar:  CupertinoNavigationBar(
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-         onPressed:  () {
-            Get.back();
-          },
-          child:  const Icon(CupertinoIcons.back),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.transparent,
+              leading: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Icon(CupertinoIcons.back),
+              ),
+              middle: const Text("Stats", style: TextStyle(fontSize: 28)),
+              trailing: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: const Icon(CupertinoIcons.info),
+                  onPressed: () {
+                    _showInfoDialog(context);
+                  }),
+            ),
+          ],
         ),
-        middle: Text("Stats", style: TextStyle(fontSize: 18)),
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -68,12 +82,12 @@ class StatsView extends GetView<StatsController> {
     final screenWidth = MediaQuery.of(Get.context!).size.width;
     final screenHeight = MediaQuery.of(Get.context!).size.height;
 
-     // Determine bar     width based on label
-        final barWidth = label == "Daily"
-            ? screenWidth / 9 // Daily bars are 1/8 of the screen width
-            : label == "Monthly"
-                ? screenWidth / 13 // Monthly bars are 1/32 of the screen width
-                : screenWidth / 6; // Yearly bars are 1/13 of the screen width
+    // Determine bar     width based on label
+    final barWidth = label == "Daily"
+        ? screenWidth / 9 // Daily bars are 1/8 of the screen width
+        : label == "Monthly"
+            ? screenWidth / 13 // Monthly bars are 1/32 of the screen width
+            : screenWidth / 6; // Yearly bars are 1/13 of the screen width
 
     final maxUnits = data.values.isNotEmpty
         ? data.values.reduce((a, b) => a > b ? a : b)
@@ -83,107 +97,136 @@ class StatsView extends GetView<StatsController> {
     final recommendedValue =
         label == "Daily" ? 2.0 : (label == "Monthly" ? 56.0 : 14.0 * 12);
 
-    return SizedBox(
-      height: screenHeight / 3, // Fixed height for the chart
-      child: Stack(
-        children: [
+    return Container(
+      decoration: BoxDecoration(
+        color: CupertinoColors.darkBackgroundGray,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: screenHeight / 3, // Fixed height for the chart
+          child: Stack(
+            children: [
+              // Bar chart
+              ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: data.length,
+                separatorBuilder: (_, __) =>
+                    const SizedBox(width: 4), // Spacing between bars
+                itemBuilder: (context, index) {
+                  final entry = data.entries.elementAt(index);
+                  final date = entry.key; // Date (e.g., "2025-01-04")
+                  final units = entry.value; // Total units
+                  final barHeight = (units / maxUnits) *
+                      screenHeight /
+                      4; // Scale bars to fit
 
-          // Bar chart
-          ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: data.length,
-            separatorBuilder: (_, __) =>
-                const SizedBox(width: 4), // Spacing between bars
-            itemBuilder: (context, index) {
-              final entry = data.entries.elementAt(index);
-              final date = entry.key; // Date (e.g., "2025-01-04")
-              final units = entry.value; // Total units
-              final barHeight = (units / maxUnits) * screenHeight/4; // Scale bars to fit
-
-              return Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.end, // Align bars at the bottom
-                children: [
-                  Stack(
-                    alignment: Alignment
-                        .bottomCenter, // Ensure bars align to the bottom
+                  return Column(
+                    mainAxisAlignment:
+                        MainAxisAlignment.end, // Align bars at the bottom
                     children: [
-                      Container(
-                        width: barWidth,
-                        // height: 100, // Full bar height
-                        decoration: BoxDecoration(
-                          color:
-                              CupertinoColors.transparent, // Background color
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                      Stack(
+                        alignment: Alignment
+                            .bottomCenter, // Ensure bars align to the bottom
+                        children: [
+                          Container(
+                            width: barWidth,
+                            // height: 100, // Full bar height
+                            decoration: BoxDecoration(
+                              color: CupertinoColors
+                                  .transparent, // Background color
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          Container(
+                            width: barWidth,
+                            height: barHeight, // Scaled bar height
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.activeBlue,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        width: barWidth,
-                        height: barHeight, // Scaled bar height
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.activeBlue,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _shortenLabel(date, label),
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        units.toStringAsFixed(1),
+                        style: const TextStyle(
+                            fontSize: 12, color: CupertinoColors.systemGrey),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _shortenLabel(date, label),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    units.toStringAsFixed(1),
-                    style: const TextStyle(
-                        fontSize: 12, color: CupertinoColors.systemGrey),
-                  ),
-                ],
-              );
-            },
-          ),
-          // Add dotted line for recommended value
-          maxUnits > recommendedValue
-              ?
-          Positioned(
-            bottom: (recommendedValue / maxUnits) *  screenHeight/4 + 28, // Position line 
-            left: 0,
-            right: 0,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Row(
-                  children: [
-                    ...List.generate(
-                      (constraints.maxWidth / 8).floor(), 
-                      (index) => Container(
-                        width: 3,
-                        height: 3,
-                        color: CupertinoColors.systemOrange,
-                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                  );
+                },
+              ),
+              // Add dotted line for recommended value
+              maxUnits > recommendedValue
+                  ? Positioned(
+                      bottom: (recommendedValue / maxUnits) * screenHeight / 4 +
+                          28, // Position line
+                      left: 0,
+                      right: 0,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Row(
+                            children: [
+                              ...List.generate(
+                                (constraints.maxWidth / 7).floor(),
+                                (index) => Container(
+                                  width: 3,
+                                  height: 3,
+                                  color: CupertinoColors.systemOrange,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                ),
+                              ),
+                              // const Positioned(
+                              //   left: 0,
+                              //   right: 0,
+                              //   child: Text(
+                              //     "Gov Recommended",
+                              //     textAlign: TextAlign.center,
+                              //     style: TextStyle(
+                              //       fontSize: 15,
+                              //       color: CupertinoColors.systemOrange,
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          );
+                        },
                       ),
-                    ),
-                    // const Positioned(
-                    //   left: 0,
-                    //   right: 0,
-                    //   child: Text(
-                    //     "Gov Recommended",
-                    //     textAlign: TextAlign.center,
-                    //     style: TextStyle(
-                    //       fontSize: 15,
-                    //       color: CupertinoColors.systemOrange,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                );
-              
-              },
-            ),
-            
-          )
-              : const SizedBox.shrink(),
-        ],
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  Future<void> _showInfoDialog(BuildContext context) async {
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text("Recommended Consumption"),
+          content: const Text(
+            "The orange line represents the recommended alcohol consumption, 14 units a week (see NHS website for more info)",
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text("OK"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
     );
   }
 
